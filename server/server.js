@@ -1,6 +1,8 @@
 require('./config/config')
 
 const express = require('express');
+const mongoose = require('mongoose');
+
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -8,14 +10,17 @@ const bodyParser = require('body-parser');
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
+app.use(require('./routes/usuario'))
 // parse application/json
 app.use(bodyParser.json())
 
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/usuario', function (req, res) {
-    res.json('get usuario');
-});
+
+mongoose.connect(process.env.URL_DB, (err, res) => {
+    if (err) throw err;
+
+    console.log("Base de datos online");
+})
 
 app.listen(process.env.PORT, () => {
     console.log("Escuchando puerto ", process.env.PORT);
